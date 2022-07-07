@@ -1,6 +1,7 @@
 package academy.prog;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -10,7 +11,7 @@ public class Main {
 			System.out.println("Enter your login: ");
 			String login = scanner.nextLine();
 	
-			Thread th = new Thread(new GetThread());
+			Thread th = new Thread(new GetThread(login));
 			th.setDaemon(true);
 			th.start();
 
@@ -18,6 +19,11 @@ public class Main {
 			while (true) {
 				String text = scanner.nextLine();
 				if (text.isEmpty()) break;
+
+				if(text.equals("user")){
+					List<Message> list =  (new	GetUsers()).getPresentUsers();
+				}
+
 
 				Message m = new Message(login, text);
 				int res = m.send(Utils.getURL() + "/add");

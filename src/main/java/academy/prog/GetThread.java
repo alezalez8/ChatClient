@@ -13,16 +13,19 @@ import java.nio.charset.StandardCharsets;
 public class GetThread implements Runnable {
     private final Gson gson;
     private int n;
+    private final String login;
 
-    public GetThread() {
+    public GetThread(String login) {
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        this.login = login;
     }
+
 
     @Override
     public void run() {
         try {
-            while ( ! Thread.interrupted()) {
-                URL url = new URL(Utils.getURL() + "/get?from=" + n);
+            while (!Thread.interrupted()) {
+                URL url = new URL(Utils.getURL() + "/get?from=" + n + "&log=" + login);
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
                 InputStream is = http.getInputStream();
@@ -33,8 +36,8 @@ public class GetThread implements Runnable {
                     JsonMessages list = gson.fromJson(strBuf, JsonMessages.class);
                     if (list != null) {
                         for (Message m : list.getList()) {
+                            n = m.getCurrentCount();
                             System.out.println(m);
-                            n++;
                         }
                     }
                 } finally {
