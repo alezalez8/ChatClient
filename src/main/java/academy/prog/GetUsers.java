@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -21,7 +20,7 @@ public class GetUsers {
     }
 
     public List<Message> getPresentUsers() throws IOException {
-        URL url = new URL(Utils.getURL() + "/user");
+        URL url = new URL(Utils.getURL() + "/users");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         InputStream is = http.getInputStream();
         try {
@@ -30,11 +29,10 @@ public class GetUsers {
 
             JsonMessages list = gson.fromJson(strBuf, JsonMessages.class);
             if (list != null) {
-                System.out.println("Users are present now^");
-                for (Message m : list.getList()) {
-
-                    System.out.println(m.getFrom());
-                }
+                System.out.println("Users are present now:");
+                list.getList().stream().map(Message::getFrom)
+                        .distinct()
+                        .forEach(System.out::println);
                 System.out.println("____________________");
             }
         } finally {
