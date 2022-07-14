@@ -67,9 +67,6 @@ public class Message {
         return currentCount;
     }
 
-    public void setCurrentCount(int currentCount) {
-        this.currentCount = currentCount;
-    }
 
     private String getLogin(String text) {
         // @clientLogin text....

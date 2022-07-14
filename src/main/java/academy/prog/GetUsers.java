@@ -14,44 +14,34 @@ import java.util.List;
 public class GetUsers {
     private final Gson gson;
 
-
     public GetUsers() {
-        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        gson = new GsonBuilder().create();
     }
 
-    public List<Message> getPresentUsers() throws IOException {
+    public void getPresentUsers() throws IOException {
         URL url = new URL(Utils.getURL() + "/users");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         InputStream is = http.getInputStream();
+        String users;
         try {
             byte[] buf = responseBodyToArray(is);
             String strBuf = new String(buf, StandardCharsets.UTF_8);
-
-            JsonMessages list = gson.fromJson(strBuf, JsonMessages.class);
-            if (list != null) {
-                System.out.println("Users are present now:");
-                list.getList().stream().map(Message::getFrom)
-                        .distinct()
-                        .forEach(System.out::println);
-                System.out.println("____________________");
-            }
+            System.out.println("Users are present now:");
+            System.out.println(strBuf);
+            System.out.println("____________________");
         } finally {
             is.close();
         }
-
-        return null;
     }
 
     private byte[] responseBodyToArray(InputStream is) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         byte[] buf = new byte[10240];
         int r;
-
         do {
             r = is.read(buf);
             if (r > 0) bos.write(buf, 0, r);
         } while (r != -1);
-
         return bos.toByteArray();
     }
 }

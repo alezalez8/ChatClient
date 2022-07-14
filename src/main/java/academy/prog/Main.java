@@ -21,7 +21,7 @@ public class Main {
                 if (text.isEmpty()) break;
 
                 if (text.equals("users")) {
-                    List<Message> list = (new GetUsers()).getPresentUsers();
+                    (new GetUsers()).getPresentUsers();
                 } else {
 
                     Message m = new Message(login, text);
